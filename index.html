@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AK Trade — Full System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+  background:#000;
+  color:#fff;
+  font-family:sans-serif;
+  margin:0;
+  padding-bottom:90px;
+}
+.box{
+  background:#111;
+  padding:20px;
+  border-radius:12px;
+  margin:15px;
+}
+input, select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  margin-top:10px;
+}
+button{
+  width:100%;
+  padding:12px;
+  background:#00A8FF;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  margin-top:12px;
+  font-size:17px;
+}
+h2{ color:#00A8FF; }
+
+nav{
+text-align:center;
+padding:18px 0;
+background:#000;
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+z-index:999;
+}
+
+nav a{
+color:#00A8FF;
+margin:0 14px;
+font-size:18px;
+text-decoration:none;
+font-weight:600;
+}
+
+nav .channelBtn{
+  color:#fff;
+  background:#00A8FF;
+  padding:6px 12px;
+  border-radius:8px;
+}
+
+.hidden{ display:none; }
+</style>
+
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+  <div class="box">
+    <h2>Login</h2>
+    <input id="loginUser" placeholder="Username">
+    <input id="loginPass" placeholder="Password" type="password">
+    <button onclick="login()">Login</button>
+    <button onclick="showSignup()">Create Account</button>
+  </div>
+</div>
+
+<!-- SIGNUP PAGE -->
+<div id="signupPage" class="hidden">
+  <div class="box">
+    <h2>Create Account</h2>
+    <input id="newUser" placeholder="Username">
+    <input id="newPass" placeholder="Password" type="password">
+    <input id="refBy" placeholder="Referral Username (Optional)">
+    <button onclick="signup()">Create Account</button>
+    <button onclick="showLogin()">Back to Login</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+<div class="box">
+  <h2>Dashboard</h2>
+  <p id="welcome"></p>
+  <p id="bal">Balance: 0 Rs</p>
+  <p id="planName">Active Plan: None</p>
+  <p id="planExpiry">Plan Expiry: —</p>
+</div>
+
+<!-- DEPOSIT -->
+<div id="deposit" class="box hidden">
+  <h2>Deposit</h2>
+  <select id="depositType">
+    <option>JazzCash</option>
+    <option>Easypaisa</option>
+  </select>
+
+  <input id="depositAmount" placeholder="Amount">
+
+  <p style="margin-top:10px;">Upload Screenshot:</p>
+  <input type="file" id="ssUpload" accept="image/*">
+
+  <p style="margin-top:15px;background:#000;padding:12px;border-radius:10px;">
+    Pay to: <b>03046416033 (Ghulam Ruqayya)</b>
+  </p>
+
+  <button onclick="depositReq()">Submit Deposit</button>
+</div>
+
+<!-- WITHDRAW -->
+<div id="withdraw" class="box hidden">
+  <h2>Withdraw</h2>
+  <select id="widType">
+    <option>JazzCash</option>
+    <option>Easypaisa</option>
+  </select>
+  <input id="widNum" placeholder="Your Number">
+  <input id="widName" placeholder="Your Name">
+  <input id="widAmount" placeholder="Amount">
+  <button onclick="withdrawReq()">Submit Withdraw</button>
+</div>
+
+<!-- TASK -->
+<div id="task" class="box hidden">
+  <h2>Daily Task</h2>
+  <p>Watch this TikTok video:</p>
+  <a href="https://www.tiktok.com" style="color:#00A8FF;">Open Task Link</a>
+  <button onclick="completeTask()">Complete Task</button>
+</div>
+
+<!-- REFERRAL -->
+<div id="referral" class="box hidden">
+  <h2>Referral</h2>
+  <p>Your Username: <b id="refName"></b></p>
+  <p>Your Referral Link:</p>
+  <p style="background:#000;padding:10px;border-radius:8px;">
+    aktrade.com/?ref=<span id="refLink"></span>
+  </p>
+</div>
+
+<!-- PLAN -->
+<div id="plan" class="box hidden">
+  <h2>Plans</h2>
+
+  <div style="background:#000;padding:12px;border-radius:12px;margin-bottom:12px;">
+    <b>Plan 1:</b> Deposit 200 → Daily 10Rs → 50 Days    
+    <button onclick="buyPlan(200,10)">Buy Plan 1</button>
+  </div>
+
+  <div style="background:#000;padding:12px;border-radius:12px;margin-bottom:12px;">
+    <b>Plan 2:</b> Deposit 600 → Daily 35Rs → 50 Days    
+    <button onclick="buyPlan(600,35)">Buy Plan 2</button>
+  </div>
+
+  <div style="background:#000;padding:12px;border-radius:12px;margin-bottom:12px;">
+    <b>Plan 3:</b> Deposit 1200 → Daily 80Rs → 50 Days    
+    <button onclick="buyPlan(1200,80)">Buy Plan 3</button>
+  </div>
+
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="box hidden">
+  <h2>Profile</h2>
+  <p>Username: <b id="proUser"></b></p>
+  <p>Balance: <b id="proBal"></b></p>
+  <button onclick="logout()">Logout</button>
+</div>
+
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navBar" class="hidden">
+  <a onclick="showSection('deposit')">Deposit</a>
+  <a onclick="showSection('withdraw')">Withdraw</a>
+  <a onclick="showSection('task')">Task</a>
+  <a onclick="showSection('referral')">Referral</a>
+  <a onclick="showSection('plan')">Plan</a>
+  <a onclick="showSection('profile')">Profile</a>
+
+  <!-- BLUE CHANNEL BUTTON -->
+  <a class="channelBtn" href="https://whatsapp.com/channel/0029Vb6rV2aL7UVYj5WZvi3y" target="_blank">Channel</a>
+</nav>
+
+<script>
+// -------------------- Signup --------------------
+function signup(){
+  let u = newUser.value.trim();
+  let p = newPass.value.trim();
+  let r = refBy.value.trim();
+
+  if(!u || !p) return alert("Please fill all fields");
+
+  if(localStorage.getItem("user_"+u)) return alert("User already exists");
+
+  localStorage.setItem("user_"+u, JSON.stringify({
+    pass:p,
+    bal:0,
+    plan:null,
+    daily:0,
+    planExpiry:null,
+    lastTaskDate:null,
+    ref:r || ""
+  }));
+
+  alert("Account created!");
+  showLogin();
+}
+
+// -------------------- Login --------------------
+function login(){
+  let u = loginUser.value.trim();
+  let p = loginPass.value.trim();
+
+  let data = localStorage.getItem("user_"+u);
+  if(!data) return alert("Wrong account");
+
+  data = JSON.parse(data);
+  if(data.pass !== p) return alert("Wrong password");
+
+  localStorage.setItem("currentUser",u);
+  loadDashboard();
+}
+
+// -------------------- Dashboard Load --------------------
+function loadDashboard(){
+  let u = localStorage.getItem("currentUser");
+  let d = JSON.parse(localStorage.getItem("user_"+u));
+
+  welcome.innerHTML = "Welcome, " + u;
+  bal.innerHTML = "Balance: " + d.bal + " Rs";
+  planName.innerHTML = "Active Plan: " + (d.plan ? d.plan : "None");
+  planExpiry.innerHTML = "Plan Expiry: " + (d.planExpiry ? d.planExpiry : "—");
+
+  refName.innerHTML = u;
+  refLink.innerHTML = u;
+
+  proUser.innerHTML = u;
+  proBal.innerHTML = d.bal + " Rs";
+
+  loginPage.classList.add("hidden");
+  signupPage.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  navBar.classList.remove("hidden");
+
+  showSection("deposit");
+}
+
+// -------------------- Navigation --------------------
+function showSection(sec){
+  ["deposit","withdraw","task","referral","plan","profile"].forEach(id=>{
+    document.getElementById(id).classList.add("hidden");
+  });
+  document.getElementById(sec).classList.remove("hidden");
+}
+
+// -------------------- Deposit --------------------
+function depositReq(){
+  alert("Deposit request sent!");
+}
+
+// -------------------- Withdraw --------------------
+function withdrawReq(){
+  alert("Withdraw request sent!");
+}
+
+// -------------------- Daily Task — 1 Time Per Day --------------------
+function completeTask(){
+  let u = localStorage.getItem("currentUser");
+  let d = JSON.parse(localStorage.getItem("user_"+u));
+
+  if(!d.plan) 
+    return alert("Buy a plan first to earn.");
+
+  let today = new Date().toDateString();
+
+  if(d.lastTaskDate === today){
+    return alert("Aaj ka task already complete ho chuka hai.");
+  }
+
+  d.bal += d.daily;
+  d.lastTaskDate = today;
+
+  localStorage.setItem("user_"+u, JSON.stringify(d));
+
+  alert(d.daily + " Rs earned from today's task!");
+  loadDashboard();
+}
+
+// -------------------- Buy Plan --------------------
+function buyPlan(amount, dailyIncome){
+  let u = localStorage.getItem("currentUser");
+  let d = JSON.parse(localStorage.getItem("user_"+u));
+
+  d.plan = amount+" Rs Plan";
+  d.daily = dailyIncome;
+
+  let now = new Date();
+  now.setDate(now.getDate()+50);
+  d.planExpiry = now.toDateString();
+
+  localStorage.setItem("user_"+u, JSON.stringify(d));
+
+  alert("Plan Activated!");
+  loadDashboard();
+}
+
+// -------------------- Logout --------------------
+function logout(){
+  localStorage.removeItem("currentUser");
+  location.reload();
+}
+
+// -------------------- Switch Pages --------------------
+function showSignup(){
+  loginPage.classList.add("hidden");
+  signupPage.classList.remove("hidden");
+}
+function showLogin(){
+  signupPage.classList.add("hidden");
+  loginPage.classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
